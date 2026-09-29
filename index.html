@@ -1,59 +1,95 @@
-<%@ Page Language="C#" AutoEventWireup="true"
-    CodeBehind="WebForm1.aspx.cs"
-    Inherits="finance.WebForm1" %>
-
 <!DOCTYPE html>
+<html lang="zh-TW">
 
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head runat="server">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<head>
+    <meta charset="UTF-8">
     <title>未平倉量分析</title>
 </head>
 
 <body>
 
-<form id="form1" runat="server">
+    <h1>未平倉量分析</h1>
 
-    <div>
-
-        <h2>未平倉量分析</h2>
-
+    <p>
         未平倉量：
+        <select id="openInterest">
+            <option value="">請選擇</option>
+            <option value="增加">增加</option>
+            <option value="減少">減少</option>
+        </select>
+    </p>
 
-        <asp:DropDownList ID="ddlOpenInterest" runat="server">
-            <asp:ListItem Value="">請選擇</asp:ListItem>
-            <asp:ListItem Value="增加">增加</asp:ListItem>
-            <asp:ListItem Value="減少">減少</asp:ListItem>
-        </asp:DropDownList>
-
-        <br /><br />
-
+    <p>
         台指期貨價格：
+        <select id="price">
+            <option value="">請選擇</option>
+            <option value="上漲">上漲</option>
+            <option value="下跌">下跌</option>
+        </select>
+    </p>
 
-        <asp:DropDownList ID="ddlPrice" runat="server">
-            <asp:ListItem Value="">請選擇</asp:ListItem>
-            <asp:ListItem Value="上漲">上漲</asp:ListItem>
-            <asp:ListItem Value="下跌">下跌</asp:ListItem>
-        </asp:DropDownList>
+    <button onclick="checkResult()">開始分析</button>
 
-        <br /><br />
+    <br><br>
 
-        <asp:Button
-            ID="btnCheck"
-            runat="server"
-            Text="開始分析"
-            OnClick="btnCheck_Click" />
+    <div id="result"></div>
 
-        <br /><br />
 
-        <asp:Label
-            ID="lblResult"
-            runat="server">
-        </asp:Label>
+    <script>
 
-    </div>
+        function checkResult() {
 
-</form>
+            var openInterest =
+                document.getElementById("openInterest").value;
+
+            var price =
+                document.getElementById("price").value;
+
+            var result = "";
+
+            if (openInterest == "" || price == "") {
+
+                result = "請選擇未平倉量與台指期貨價格。";
+
+            }
+            else if (openInterest == "增加" && price == "上漲") {
+
+                result =
+                    "未平倉量增加、台指期貨價格上漲。<br>" +
+                    "代表新買方積極介入，屬強勢上漲格局，" +
+                    "未來期貨價格持續看漲。";
+
+            }
+            else if (openInterest == "增加" && price == "下跌") {
+
+                result =
+                    "未平倉量增加、台指期貨價格下跌。<br>" +
+                    "代表新空方進入市場，屬弱勢格局，" +
+                    "未來期貨價格持續看跌。";
+
+            }
+            else if (openInterest == "減少" && price == "上漲") {
+
+                result =
+                    "未平倉量減少、台指期貨價格上漲。<br>" +
+                    "代表原有的多單已進行平倉，盤勢由強轉弱，" +
+                    "未來期貨價格可能反轉而下。";
+
+            }
+            else if (openInterest == "減少" && price == "下跌") {
+
+                result =
+                    "未平倉量減少、台指期貨價格下跌。<br>" +
+                    "代表原有的空單已進行平倉，盤勢由弱轉強，" +
+                    "未來期貨價格可能反轉向上。";
+            }
+
+            document.getElementById("result").innerHTML =
+                "<h3>分析結果</h3>" + result;
+        }
+
+    </script>
 
 </body>
+
 </html>

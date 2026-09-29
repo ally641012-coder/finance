@@ -30,9 +30,9 @@
 
     <button onclick="checkResult()">開始分析</button>
 
-    <br><br>
+    <h3>分析結果：</h3>
 
-    <div id="result"></div>
+    <p id="result"></p>
 
 
     <script>
@@ -48,48 +48,29 @@
             var result = "";
 
             if (openInterest == "" || price == "") {
-
-                result = "請選擇未平倉量與台指期貨價格。";
-
+                result = "請先選擇完整資料";
             }
+
             else if (openInterest == "增加" && price == "上漲") {
-
-                result =
-                    "未平倉量增加、台指期貨價格上漲。<br>" +
-                    "代表新買方積極介入，屬強勢上漲格局，" +
-                    "未來期貨價格持續看漲。";
-
+                result = "新買方積極介入，屬強勢上漲格局，未來期貨價格持續看漲。";
             }
+
             else if (openInterest == "增加" && price == "下跌") {
-
-                result =
-                    "未平倉量增加、台指期貨價格下跌。<br>" +
-                    "代表新空方進入市場，屬弱勢格局，" +
-                    "未來期貨價格持續看跌。";
-
+                result = "新空方進入市場，屬弱勢格局，未來期貨價格持續看跌。";
             }
+
             else if (openInterest == "減少" && price == "上漲") {
-
-                result =
-                    "未平倉量減少、台指期貨價格上漲。<br>" +
-                    "代表原有的多單已進行平倉，盤勢由強轉弱，" +
-                    "未來期貨價格可能反轉而下。";
-
+                result = "原有多單進行平倉，盤勢由強轉弱，未來期貨價格可能反轉而下。";
             }
+
             else if (openInterest == "減少" && price == "下跌") {
-
-                result =
-                    "未平倉量減少、台指期貨價格下跌。<br>" +
-                    "代表原有的空單已進行平倉，盤勢由弱轉強，" +
-                    "未來期貨價格可能反轉向上。";
+                result = "原有空單進行平倉，盤勢由弱轉強，未來期貨價格可能反轉向上。";
             }
 
-            document.getElementById("result").innerHTML =
-                "<h3>分析結果</h3>" + result;
+            document.getElementById("result").innerHTML = result;
         }
 
     </script>
 
 </body>
-
 </html>

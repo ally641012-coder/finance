@@ -3,74 +3,319 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>未平倉量分析</title>
+
+    <style>
+        body {
+            font-family: "Microsoft JhengHei", Arial, sans-serif;
+            background-color: #f5f7f7;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 600px;
+            max-width: 85%;
+            margin: 70px auto;
+            background-color: white;
+            padding: 35px 45px;
+            border-radius: 12px;
+            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        h1 {
+            text-align: center;
+            color: #3f6668;
+            margin-bottom: 10px;
+        }
+
+        .description {
+            text-align: center;
+            color: #666666;
+            margin-bottom: 30px;
+        }
+
+        .input-area {
+            background-color: #e4eeee;
+            padding: 25px;
+            border-radius: 8px;
+        }
+
+        .input-row {
+            margin-bottom: 20px;
+        }
+
+        .input-row:last-child {
+            margin-bottom: 0;
+        }
+
+        label {
+            display: inline-block;
+            width: 160px;
+            font-size: 17px;
+            font-weight: bold;
+            color: #333333;
+        }
+
+        select {
+            width: 250px;
+            padding: 9px;
+            font-size: 16px;
+            font-family: "Microsoft JhengHei";
+            border: 1px solid #aaaaaa;
+            border-radius: 5px;
+            background-color: white;
+        }
+
+        .button-area {
+            text-align: center;
+            margin-top: 25px;
+        }
+
+        button {
+            width: 150px;
+            padding: 11px;
+            background-color: #527b7d;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 17px;
+            font-family: "Microsoft JhengHei";
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #3f6668;
+        }
+
+        .result-box {
+            display: none;
+            margin-top: 25px;
+            padding: 20px;
+            background-color: #fff4dd;
+            border-left: 5px solid #e4a64a;
+            border-radius: 4px;
+        }
+
+        .result-title {
+            font-size: 19px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333333;
+        }
+
+        #result {
+            font-size: 17px;
+            line-height: 1.8;
+            color: #333333;
+        }
+
+        @media screen and (max-width: 600px) {
+
+            .container {
+                width: auto;
+                margin: 30px 15px;
+                padding: 25px;
+            }
+
+            label {
+                display: block;
+                width: auto;
+                margin-bottom: 8px;
+            }
+
+            select {
+                width: 100%;
+            }
+        }
+    </style>
+
 </head>
+
 
 <body>
 
-    <h1>未平倉量分析</h1>
+    <div class="container">
 
-    <p>
-        未平倉量：
-        <select id="openInterest">
-            <option value="">請選擇</option>
-            <option value="增加">增加</option>
-            <option value="減少">減少</option>
-        </select>
-    </p>
+        <h1>未平倉量分析</h1>
 
-    <p>
-        台指期貨價格：
-        <select id="price">
-            <option value="">請選擇</option>
-            <option value="上漲">上漲</option>
-            <option value="下跌">下跌</option>
-        </select>
-    </p>
+        <div class="description">
+            根據未平倉量與台指期貨價格變化判斷市場狀況
+        </div>
 
-    <button onclick="checkResult()">開始分析</button>
 
-    <h3>分析結果：</h3>
+        <div class="input-area">
 
-    <p id="result"></p>
+            <!-- 未平倉量 -->
+            <div class="input-row">
+
+                <label for="openInterest">
+                    未平倉量：
+                </label>
+
+                <select id="openInterest">
+
+                    <option value="">
+                        請選擇
+                    </option>
+
+                    <option value="增加">
+                        增加
+                    </option>
+
+                    <option value="減少">
+                        減少
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- 台指期貨價格 -->
+            <div class="input-row">
+
+                <label for="price">
+                    台指期貨價格：
+                </label>
+
+                <select id="price">
+
+                    <option value="">
+                        請選擇
+                    </option>
+
+                    <option value="上漲">
+                        上漲
+                    </option>
+
+                    <option value="下跌">
+                        下跌
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- 按鈕 -->
+            <div class="button-area">
+
+                <button type="button" onclick="checkResult()">
+                    開始分析
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- 分析結果 -->
+        <div id="resultBox" class="result-box">
+
+            <div class="result-title">
+                分析結果
+            </div>
+
+            <div id="result"></div>
+
+        </div>
+
+    </div>
 
 
     <script>
 
         function checkResult() {
 
+            // 取得使用者選擇的未平倉量
             var openInterest =
                 document.getElementById("openInterest").value;
 
+            // 取得使用者選擇的台指期貨價格
             var price =
                 document.getElementById("price").value;
 
             var result = "";
 
+
+
+            // 沒有選擇完整
             if (openInterest == "" || price == "") {
-                result = "請先選擇完整資料";
+
+                result =
+                    "請選擇未平倉量與台指期貨價格。";
+
             }
 
-            else if (openInterest == "增加" && price == "上漲") {
-                result = "新買方積極介入，屬強勢上漲格局，未來期貨價格持續看漲。";
+
+            // 未平倉量增加 + 價格上漲
+            else if (
+                openInterest == "增加" &&
+                price == "上漲"
+            ) {
+
+                result =
+                    "未平倉量增加、台指期貨價格上漲。<br>" +
+                    "代表新買方積極介入，屬強勢上漲格局，" +
+                    "未來期貨價格持續看漲。";
+
             }
 
-            else if (openInterest == "增加" && price == "下跌") {
-                result = "新空方進入市場，屬弱勢格局，未來期貨價格持續看跌。";
+
+            // 未平倉量增加 + 價格下跌
+            else if (
+                openInterest == "增加" &&
+                price == "下跌"
+            ) {
+
+                result =
+                    "未平倉量增加、台指期貨價格下跌。<br>" +
+                    "代表新空方進入市場，屬弱勢格局，" +
+                    "未來期貨價格持續看跌。";
+
             }
 
-            else if (openInterest == "減少" && price == "上漲") {
-                result = "原有多單進行平倉，盤勢由強轉弱，未來期貨價格可能反轉而下。";
+
+            // 未平倉量減少 + 價格上漲
+            else if (
+                openInterest == "減少" &&
+                price == "上漲"
+            ) {
+
+                result =
+                    "未平倉量減少、台指期貨價格上漲。<br>" +
+                    "代表原有的多單已進行平倉，盤勢由強轉弱，" +
+                    "未來期貨價格可能反轉而下。";
+
             }
 
-            else if (openInterest == "減少" && price == "下跌") {
-                result = "原有空單進行平倉，盤勢由弱轉強，未來期貨價格可能反轉向上。";
+
+            // 未平倉量減少 + 價格下跌
+            else if (
+                openInterest == "減少" &&
+                price == "下跌"
+            ) {
+
+                result =
+                    "未平倉量減少、台指期貨價格下跌。<br>" +
+                    "代表原有的空單已進行平倉，盤勢由弱轉強，" +
+                    "未來期貨價格可能反轉向上。";
+
             }
 
+
+            // 將分析結果顯示到網頁
             document.getElementById("result").innerHTML = result;
+
+            document.getElementById("resultBox").style.display = "block";
+
         }
 
     </script>
 
 </body>
+
 </html>
